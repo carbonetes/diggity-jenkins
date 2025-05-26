@@ -6,7 +6,6 @@ import java.util.Map;
 
 import hudson.FilePath;
 import hudson.model.TaskListener;
-import io.jenkins.plugins.diggity.Diggity;
 import io.jenkins.plugins.diggity.execute.ExecuteBinary;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.ExecuteDiggity;
@@ -24,7 +23,7 @@ public class Compile {
         SetArgs setArgs = new SetArgs();
         ExecuteBinary executeBinary = new ExecuteBinary();
 
-        if (diggityConfig.getScanName() != null && !diggityConfig.getScanName().isEmpty()) {
+        if (diggityConfig.getScanName() != null && !diggityConfig.getScanName().equals("")) {
             // Compile arguments based on the user-inputs
             String[] cmdArgs = setArgs.scanTypeArgs(diggityConfig, jenkinsConfig);
 

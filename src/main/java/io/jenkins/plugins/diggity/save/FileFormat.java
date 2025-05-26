@@ -1,5 +1,6 @@
 package io.jenkins.plugins.diggity.save;
 
+import hudson.Extension;
 import hudson.model.Job;
 import hudson.model.Queue;
 import hudson.model.Run;
@@ -7,6 +8,7 @@ import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
 import jenkins.model.Jenkins;
 
+@Extension
 public class FileFormat extends RunListener<Run<?, ?>> {
     private static String fileName;
 
@@ -46,11 +48,11 @@ public class FileFormat extends RunListener<Run<?, ?>> {
         }
     }
 
-    private static void setFileName(String fileName) {
-        FileFormat.fileName = fileName;
+    private static void setFileName(String value) {
+        fileName = value;
     }
     
     public static String getFileName() {
-        return fileName;
+        return fileName != null ? fileName : "";
     }
 }

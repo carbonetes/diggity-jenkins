@@ -28,7 +28,6 @@ import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
 import lombok.Setter;
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 import org.jenkinsci.Symbol;
@@ -44,24 +43,26 @@ import org.kohsuke.stapler.verb.POST;
 @Setter
 public class Diggity extends Builder implements SimpleBuildStep {
 
-    private DiggityConfig diggityConfig;
     private String scanDest;
+    private String scanType;
     private String scanName;
     private String skipFail;
     private String token;
     private Map<String, String> content;
+    private DiggityConfig diggityConfig;
 
     @DataBoundConstructor
     public Diggity(
         String scanDest,
-        String scanName,
         String scanType,
+        String scanName,
         String skipFail,
         String token,
         Map<String, String> content,
         DiggityConfig diggityConfig
     ) {
         this.scanDest = scanDest;
+        this.scanType = scanType;
         this.scanName = scanName;
         this.skipFail = skipFail;
         this.token = token;
@@ -109,6 +110,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
         @Override
         public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
             req.bindJSON(this, json);
+            save();
             return true;
         }
 
@@ -118,7 +120,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
         }
 
         @POST
-        public ListBoxModel doFillScanItems() throws AccessDeniedException {
+        public ListBoxModel doFillScanTypeItems() throws AccessDeniedException {
             Jenkins jenkins = Jenkins.get();
             if (!jenkins.hasPermission(Permission.CONFIGURE)) {
                 throw new AccessDeniedException("You do not have permission to configure this.");

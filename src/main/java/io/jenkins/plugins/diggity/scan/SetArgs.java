@@ -3,6 +3,7 @@ package io.jenkins.plugins.diggity.scan;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import hudson.model.TaskListener;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
 import io.jenkins.plugins.diggity.save.FileFormat;
@@ -34,6 +35,9 @@ public class SetArgs {
 
         // Scan type-specific arguments
         switch (diggityConfig.getScanType()) {
+            case "image":
+                cmdArgs.add(diggityConfig.getScanName());
+                break;
             case "dir":
                 cmdArgs.add(DIR);
                 cmdArgs.add(diggityConfig.getScanName());
