@@ -7,9 +7,12 @@ import hudson.Launcher;
 import hudson.model.AbstractProject;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import hudson.security.Permission;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
-import hudson.util.FormValidation;
+import hudson.util.ListBoxModel;
+import hudson.util.ListBoxModel.Option;
+import io.jenkins.plugins.diggity.compile.Compile;
 import io.jenkins.plugins.diggity.install.Clone;
 import io.jenkins.plugins.diggity.install.DiggityExist;
 import io.jenkins.plugins.diggity.install.Go;
@@ -17,18 +20,21 @@ import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 
+import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
 import lombok.Setter;
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
-import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.verb.POST;
 
 /**
  * @author Sairen Christian Buerano
@@ -49,6 +55,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
     public Diggity(
         String scanDest,
         String scanName,
+        String scanType,
         String skipFail,
         String token,
         Map<String, String> content,
@@ -62,6 +69,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
         this.diggityConfig = new DiggityConfig(
             scanDest, 
             scanName, 
+            scanType,
             skipFail, 
             token
         );
@@ -85,32 +93,48 @@ public class Diggity extends Builder implements SimpleBuildStep {
             Clone.repo(jenkinsConfig);
             Go.install(jenkinsConfig);
         } 
+        Compile compileArgs = new Compile();
+        compileArgs.compileArgs(jenkinsConfig, diggityConfig);
     }
 
-    @Symbol("greet")
+    @Symbol("diggity")
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-        public FormValidation doCheckName(@QueryParameter String value, @QueryParameter boolean useFrench)
-                throws IOException, ServletException {
-            if (value.length() == 0)
-                return FormValidation.error(Messages.HelloWorldBuilder_DescriptorImpl_errors_missingName());
-            if (value.length() < 4)
-                return FormValidation.warning(Messages.HelloWorldBuilder_DescriptorImpl_warnings_tooShort());
-            if (!useFrench && value.matches(".*[éáàç].*")) {
-                return FormValidation.warning(Messages.HelloWorldBuilder_DescriptorImpl_warnings_reallyFrench());
-            }
-            return FormValidation.ok();
+        public DescriptorImpl() {
+            super(Diggity.class);
+            load();
         }
 
         @Override
-        public boolean isApplicable(Class<? extends AbstractProject> aClass) {
+        public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
+            req.bindJSON(this, json);
             return true;
         }
 
         @Override
         public String getDisplayName() {
             return "Diggity BOM Analyzer";
+        }
+
+        @POST
+        public ListBoxModel doFillScanItems() throws AccessDeniedException {
+            Jenkins jenkins = Jenkins.get();
+            if (!jenkins.hasPermission(Permission.CONFIGURE)) {
+                throw new AccessDeniedException("You do not have permission to configure this.");
+            }
+            return new ListBoxModel(
+                new Option("-- Select --", ""),
+                new Option("Image", "image"),
+                new Option("File", "file"),
+                new Option("Directory", "directory"),
+                new Option("Tar File", "tar")
+            );
+        }
+
+        @Override
+        public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+            return true;
         }
 
     }

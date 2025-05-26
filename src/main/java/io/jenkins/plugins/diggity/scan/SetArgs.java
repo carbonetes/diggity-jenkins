@@ -1,0 +1,67 @@
+package io.jenkins.plugins.diggity.scan;
+
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import io.jenkins.plugins.diggity.model.DiggityConfig;
+import io.jenkins.plugins.diggity.model.JenkinsConfig;
+import io.jenkins.plugins.diggity.save.FileFormat;
+
+public class SetArgs {
+    private static final String DIR = "--dir";
+    private static final String TAR = "--tar";
+    private static final String FILE = "--file";
+    private static final String CIMODE = "--ci";
+    private static final String TOKEN = "--token";
+    private static final String PLUGIN = "--plugin";
+
+    public String[] scanTypeArgs(DiggityConfig diggityConfig, JenkinsConfig jenkinsConfig) {
+        ArrayList<String> cmdArgs = new ArrayList<>();
+
+        // Get the Go binary path
+        String workspaceDir = jenkinsConfig.getWorkspace().getRemote();
+        String goTmpDir = Paths.get(workspaceDir, "go").toString();
+        String goBinaryPath = Paths.get(goTmpDir, "bin", "go").toString();
+
+        if (goBinaryPath == null || goBinaryPath.isEmpty()) {
+            throw new IllegalArgumentException("Go binary path is not set.");
+        }
+
+        // Add go on command line
+        cmdArgs.add(goBinaryPath);
+        cmdArgs.add("run");
+        cmdArgs.add(".");
+
+        // Scan type-specific arguments
+        switch (diggityConfig.getScanType()) {
+            case "dir":
+                cmdArgs.add(DIR);
+                cmdArgs.add(diggityConfig.getScanName());
+                break;
+            case "tar":
+                cmdArgs.add(TAR);
+                cmdArgs.add(diggityConfig.getScanName());
+                break;
+            case "file":
+                cmdArgs.add(FILE);
+                cmdArgs.add(diggityConfig.getScanName());
+                break;
+            default:
+                cmdArgs.add(diggityConfig.getScanName());
+                break;
+        }
+
+        // Add standard flags
+        cmdArgs.add(CIMODE);
+        cmdArgs.add(TOKEN);
+        cmdArgs.add(diggityConfig.getToken());
+        cmdArgs.add(PLUGIN);
+        cmdArgs.add("jenkins");
+
+        // Output File
+        cmdArgs.add(FILE);
+        cmdArgs.add(FileFormat.getFileName());
+
+        return cmdArgs.toArray(new String[0]);
+    }
+}

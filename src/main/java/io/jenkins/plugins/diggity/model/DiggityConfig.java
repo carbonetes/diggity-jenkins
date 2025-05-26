@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class DiggityConfig {
     private String scanDest;
+    private String scanName;
     private String scanType;
     private String skipFail;
     private String token;
@@ -16,11 +17,13 @@ public class DiggityConfig {
 
     public DiggityConfig(
             String scanDest,
+            String scanName,
             String scanType,
             String skipFail,
             String token
     ) {
         this.scanDest = scanDest;
+        this.scanName = scanName;
         this.scanType = scanType;
         this.skipFail = skipFail;
         this.token = token;
