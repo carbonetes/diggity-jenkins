@@ -1,28 +1,57 @@
-# diggity
+<p align="center">
+<img src="assets/logo.png">
+</p>
+
+[![Carbonetes-Jacked](https://img.shields.io/badge/carbonetes-jacked-%232f7ea3)](https://github.com/carbonetes/diggity)
+[![Jacked-Jenkins](https://img.shields.io/badge/diggity-jenkins--plugin-%232f7ea3)]
+# Jenkins Plugin: Diggity
 
 ## Introduction
+<br>
 
-TODO Describe what your plugin does here
+[Diggity](https://github.com/carbonetes/diggity) provides organizations with a comprehensive view of their applications to enable informed decision-making and improve security posture. Its primary purpose is to scan for bill-of-materials, licenses, and exposed secrets.
 
-## Getting started
+This Jenkins plugin scans a specified target and exposes its dependencies, licenses and exposed secrets.
 
-TODO Tell users how to configure your plugin here, include screenshots, pipeline examples and 
-configuration-as-code examples.
 
-## Issues
+# Plugin Configuration Fields and Descriptions
+## Scan Type
+<b>Description: </b>Specified the input on scan field based on the selected scan type.
+<br>
+<b>Option:</b>
+- `Image`: Provide the image to be scanned.
+- `Directory`: Provide the target directory path to be scanned.
+- `Tar File`: Provide the target tar file path to be scanned.
 
-TODO Decide where you're going to host your issues, the default is Jenkins JIRA, but you can also enable GitHub issues,
-If you use GitHub issues there's no need for this section; else add the following line:
+## Scan
+<b>Input: </b> Image name, Directory path, tar file path, or sbom file path.
 
-Report issues and enhancements in the [Jenkins issue tracker](https://issues.jenkins.io/).
+## Skip Build Fail
+Default value is `false / unchecked`.
+<br>
+<b>Warning:</b> If the value is checked, it will restrict the plugin from failing the build based on the assessment result.
 
-## Contributing
-
-TODO review the default [CONTRIBUTING](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md) file and make sure it is appropriate for your plugin, if not then add your own one adapted from the base file
-
-Refer to our [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md)
-
-## LICENSE
+# Usage as Pipeline
+```yaml
+pipeline {
+    agent any
+    stages {
+        stage('Diggity Scan') {
+            steps {
+                script {
+                    diggity(
+                        token: '',                          // Personal access token: generated from Carbonetes Enterprise.
+                        scanType: 'image',                  // Choose Scan Type: image, directory, tar, or sbom.
+                        scanName: 'carbonetes/broker',      // Input: Image name, Directory path, tar file path, or sbom file path.
+                        skipFail: false,                    // Default: false.
+                    )
+                }
+            }
+        }
+    }
+}
+```
+# LICENSE
 
 Licensed under MIT, see [LICENSE](LICENSE.md)
 
