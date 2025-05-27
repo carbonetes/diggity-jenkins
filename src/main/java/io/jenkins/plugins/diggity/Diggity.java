@@ -46,7 +46,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
     private String scanDest;
     private String scanType;
     private String scanName;
-    private String skipFail;
+    private Boolean skipFail;
     private String token;
     private Map<String, String> content;
     private DiggityConfig diggityConfig;
@@ -56,7 +56,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
         String scanDest,
         String scanType,
         String scanName,
-        String skipFail,
+        Boolean skipFail,
         String token,
         Map<String, String> content,
         DiggityConfig diggityConfig

@@ -3,6 +3,8 @@ package io.jenkins.plugins.diggity.execute;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import hudson.AbortException;
+
 import io.jenkins.cli.shaded.org.apache.commons.io.output.ByteArrayOutputStream;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.ExecuteDiggity;
@@ -31,7 +33,7 @@ public class ExecuteBinary {
                 .pwd(jenkinsConfig.getWorkspace().child("diggityTmpDir").child("diggity"))
                 .join();
         String stdout = new String(stdoutStream.toByteArray(), StandardCharsets.UTF_8);
-        String stderr = new String(stdoutStream.toByteArray(), StandardCharsets.UTF_8);
+        String stderr = new String(stderrStream.toByteArray(), StandardCharsets.UTF_8);
 
         jenkinsConfig.getListener().getLogger().print(stdout);
         jenkinsConfig.getListener().getLogger().print(stderr);
@@ -51,7 +53,6 @@ public class ExecuteBinary {
                         line.toLowerCase().contains("error") ||
                         line.toLowerCase().contains("404") || 
                         line.toLowerCase().contains("status code")) {
-
                             assesstmentSummary = line;
                             break;
                     }
@@ -70,11 +71,12 @@ public class ExecuteBinary {
                         }
                     }
                 } 
+
             } else {
                 buildStatus = "passed";
             }
 
-        return new ExecuteDiggity(ret, buildStatus, assesstmentSummary);
+        return new ExecuteDiggity(ret, buildStatus, assesstmentSummary, diggityConfig.getSkipFail(), jenkinsConfig.getListener());
 
     }
 

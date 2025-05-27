@@ -11,7 +11,7 @@ public class DiggityConfig {
     private String scanDest;
     private String scanName;
     private String scanType;
-    private String skipFail;
+    private Boolean skipFail;
     private String token;
     private Map<String, String> content;
 
@@ -19,7 +19,7 @@ public class DiggityConfig {
             String scanDest,
             String scanName,
             String scanType,
-            String skipFail,
+            Boolean skipFail,
             String token
     ) {
         this.scanDest = scanDest;
