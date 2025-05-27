@@ -2,8 +2,8 @@
 <img src="assets/logo.png">
 </p>
 
-[![Carbonetes-Jacked](https://img.shields.io/badge/carbonetes-jacked-%232f7ea3)](https://github.com/carbonetes/diggity)
-[![Jacked-Jenkins](https://img.shields.io/badge/diggity-jenkins--plugin-%232f7ea3)]
+[![Carbonetes-Diggity](https://img.shields.io/badge/carbonetes-diggity-%232f7ea3)](https://github.com/carbonetes/diggity)
+[![Diggity-Jenkins](https://img.shields.io/badge/diggity-jenkins--plugin-%232f7ea3)]
 # Jenkins Plugin: Diggity
 
 ## Introduction
