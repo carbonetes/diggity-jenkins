@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+    Diggity Bill of Materials (BOM) Analyzer, see https://github.com/carbonetes/diggity.
+</div>
