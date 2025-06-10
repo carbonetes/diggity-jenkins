@@ -34,10 +34,13 @@ public class ExecuteBinary {
                 .join();
         String stdout = new String(stdoutStream.toByteArray(), StandardCharsets.UTF_8);
         String stderr = new String(stderrStream.toByteArray(), StandardCharsets.UTF_8);
-
+        
         jenkinsConfig.getListener().getLogger().print(stdout);
         jenkinsConfig.getListener().getLogger().print(stderr);
-
+        
+        if(stdout.toLowerCase().contains("Token is required.") && (diggityConfig.getToken() == null) || diggityConfig.getToken().isEmpty()) {
+            throw new AbortException(stdout);
+        }
         // Extract the line containing 'failed'
         if (ret != 0 || Boolean.FALSE.equals(diggityConfig.getSkipFail()) &&
             (stdout.toLowerCase().contains("failed") || stderr.toLowerCase().contains("failed") ||

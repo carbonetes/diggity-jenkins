@@ -3,6 +3,7 @@ package io.jenkins.plugins.diggity.scan;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import hudson.AbortException;
 import hudson.model.TaskListener;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
@@ -16,7 +17,11 @@ public class SetArgs {
     private static final String TOKEN = "--token";
     private static final String PLUGIN = "--plugin";
 
-    public String[] scanTypeArgs(DiggityConfig diggityConfig, JenkinsConfig jenkinsConfig) {
+    public String[] scanTypeArgs(DiggityConfig diggityConfig, JenkinsConfig jenkinsConfig) throws AbortException {
+        if(diggityConfig.getScanType() == null || diggityConfig.getScanType().isEmpty()) {
+            jenkinsConfig.getListener().getLogger().println("Scan type cannot be null or empty");
+            throw new AbortException("Scan type cannot be null or empty");
+        }
         ArrayList<String> cmdArgs = new ArrayList<>();
 
         // Get the Go binary path
@@ -51,8 +56,8 @@ public class SetArgs {
                 cmdArgs.add(diggityConfig.getScanName());
                 break;
             default:
-                cmdArgs.add(diggityConfig.getScanName());
-                break;
+                jenkinsConfig.getListener().getLogger().println("Invalid scan type: " + diggityConfig.getScanType());
+                throw new AbortException("Invalid scan type: " + diggityConfig.getScanType());
         }
 
         // Add standard flags
