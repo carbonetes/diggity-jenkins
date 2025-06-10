@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import hudson.AbortException;
 import hudson.FilePath;
 import hudson.model.TaskListener;
 import io.jenkins.plugins.diggity.execute.ExecuteBinary;
@@ -33,6 +34,9 @@ public class Compile {
             // Set Build Status as content of JSON File
             String buildStatus = diggityExecute.getBuildStatus();
             setBuildStatusContent(buildStatus, diggityConfig, diggityExecute.getAssesstmentSummary());
+        } else {
+            jenkinsConfig.getListener().getLogger().println("Please input your scan name");
+            throw new AbortException("Scan name cannot be null or empty");
         }
     }
 

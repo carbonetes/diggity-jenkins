@@ -25,7 +25,7 @@ public class DiggityConfig {
         this.scanDest = scanDest;
         this.scanName = scanName;
         this.scanType = scanType;
-        this.skipFail = skipFail;
+        this.skipFail = (skipFail != null) ? skipFail : false;
         this.token = token;
     }
 }
