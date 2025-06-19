@@ -10,6 +10,7 @@ import io.jenkins.plugins.diggity.model.JenkinsConfig;
 import io.jenkins.plugins.diggity.save.FileFormat;
 
 public class SetArgs {
+    private static final String DIGGITY = "diggity";
     private static final String DIR = "--dir";
     private static final String TAR = "--tar";
     private static final String FILE = "--file";
@@ -24,26 +25,19 @@ public class SetArgs {
         }
         ArrayList<String> cmdArgs = new ArrayList<>();
 
-        // Get the Go binary path
         String workspaceDir = jenkinsConfig.getWorkspace().getRemote();
-        String goTmpDir = Paths.get(workspaceDir, "go").toString();
-        String goBinaryPath = Paths.get(goTmpDir, "bin", "go").toString();
+        String diggityBinaryPath = Paths.get(workspaceDir, "diggity").toString();
+        
+        cmdArgs.add(diggityBinaryPath);
 
-        if (goBinaryPath == null || goBinaryPath.isEmpty()) {
-            throw new IllegalArgumentException("Go binary path is not set.");
-        }
 
-        // Add go on command line
-        cmdArgs.add(goBinaryPath);
-        cmdArgs.add("run");
-        cmdArgs.add(".");
 
         // Scan type-specific arguments
         switch (diggityConfig.getScanType()) {
             case "image":
                 cmdArgs.add(diggityConfig.getScanName());
                 break;
-            case "dir":
+            case "directory":
                 cmdArgs.add(DIR);
                 cmdArgs.add(diggityConfig.getScanName());
                 break;

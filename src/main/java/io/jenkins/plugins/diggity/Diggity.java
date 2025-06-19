@@ -16,6 +16,7 @@ import io.jenkins.plugins.diggity.compile.Compile;
 import io.jenkins.plugins.diggity.install.Clone;
 import io.jenkins.plugins.diggity.install.DiggityExist;
 import io.jenkins.plugins.diggity.install.Go;
+import io.jenkins.plugins.diggity.install.InstallBinary;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
 
@@ -91,8 +92,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
         
         DiggityExist diggityExist = new DiggityExist();
         if (Boolean.FALSE.equals(diggityExist.checkIfExists(jenkinsConfig.getWorkspace()))) {
-            Clone.repo(jenkinsConfig);
-            Go.install(jenkinsConfig);
+            InstallBinary.installDiggity(jenkinsConfig, diggityConfig);
         } 
         Compile compileArgs = new Compile();
         compileArgs.compileArgs(jenkinsConfig, diggityConfig);
