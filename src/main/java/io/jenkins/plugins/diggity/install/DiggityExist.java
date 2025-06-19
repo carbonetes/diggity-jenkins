@@ -11,7 +11,7 @@ public class DiggityExist {
 
     public Boolean checkIfExists(FilePath workspace) {
         String workspacePath = workspace.getRemote();
-        String version = "v1.14.3-ci";
+        String version = "v1.17.1";
         String filename = "diggity-" + version + "-exist.txt";
         String fileContent = "Diggity" + version + " installed on this workspace";
         Boolean fileExists = checkFileExists(workspacePath, filename);
