@@ -31,6 +31,9 @@ Default value is `false / unchecked`.
 <br>
 <b>Warning:</b> If the value is checked, it will restrict the plugin from failing the build based on the assessment result.
 
+# Output
+<img src="assets/sample_output.png">
+
 # Usage as Pipeline
 ```yaml
 pipeline {
@@ -51,6 +54,9 @@ pipeline {
     }
 }
 ```
+# Usage as Build Step
+<img src="assets/build_step.png">
+
 # LICENSE
 
 Licensed under MIT, see [LICENSE](LICENSE.md)
