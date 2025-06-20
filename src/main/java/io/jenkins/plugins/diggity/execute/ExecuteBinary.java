@@ -40,7 +40,7 @@ public class ExecuteBinary {
         // Token check
         if (stdout.toLowerCase().contains("token is required.") &&
             (diggityConfig.getToken() == null || diggityConfig.getToken().isEmpty())) {
-            throw new IOException(stdout);
+            throw new IOException("Token cannot be null or empty");
         }
 
         // Extract the line containing 'failed', 'error', '404', or 'status code'

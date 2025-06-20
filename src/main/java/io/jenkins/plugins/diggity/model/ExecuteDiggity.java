@@ -20,11 +20,10 @@ public class ExecuteDiggity {
         this.assesstmentSummary = assesstmentSummary;
 
         if (buildStatus == "failed" && skipFail) {
-            listener.getLogger().println("Diggity failed: " + (assesstmentSummary != null ? assesstmentSummary : "Unknown error"));
             listener.getLogger().println("Diggity failed but skipping failure due to configuration.");
         }
         if (buildStatus == "failed" && !skipFail) {
-            throw new AbortException("Diggity failed: " + (assesstmentSummary != null ? assesstmentSummary : "Unknown error"));
+            throw new AbortException("Diggity execution failed");
         }
     }
 }

@@ -20,7 +20,7 @@ public class SetArgs {
 
     public String[] scanTypeArgs(DiggityConfig diggityConfig, JenkinsConfig jenkinsConfig) throws AbortException {
         if(diggityConfig.getScanType() == null || diggityConfig.getScanType().isEmpty()) {
-            jenkinsConfig.getListener().getLogger().println("Scan type cannot be null or empty");
+            jenkinsConfig.getListener().getLogger().println("Please input your scan type");
             throw new AbortException("Scan type cannot be null or empty");
         }
         ArrayList<String> cmdArgs = new ArrayList<>();
