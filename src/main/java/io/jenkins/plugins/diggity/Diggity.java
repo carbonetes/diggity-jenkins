@@ -128,7 +128,6 @@ public class Diggity extends Builder implements SimpleBuildStep {
             return new ListBoxModel(
                 new Option("-- Select --", ""),
                 new Option("Image", "image"),
-                new Option("File", "file"),
                 new Option("Directory", "directory"),
                 new Option("Tar File", "tar")
             );
