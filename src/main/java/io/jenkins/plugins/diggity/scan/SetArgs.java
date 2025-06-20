@@ -45,10 +45,6 @@ public class SetArgs {
                 cmdArgs.add(TAR);
                 cmdArgs.add(diggityConfig.getScanName());
                 break;
-            case "file":
-                cmdArgs.add(FILE);
-                cmdArgs.add(diggityConfig.getScanName());
-                break;
             default:
                 jenkinsConfig.getListener().getLogger().println("Invalid scan type: " + diggityConfig.getScanType());
                 throw new AbortException("Invalid scan type: " + diggityConfig.getScanType());
