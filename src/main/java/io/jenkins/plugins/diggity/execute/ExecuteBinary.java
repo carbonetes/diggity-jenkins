@@ -3,6 +3,7 @@ package io.jenkins.plugins.diggity.execute;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import hudson.AbortException;
 import io.jenkins.cli.shaded.org.apache.commons.io.output.ByteArrayOutputStream;
 import io.jenkins.plugins.diggity.model.ExecuteDiggity;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
@@ -38,9 +39,9 @@ public class ExecuteBinary {
         jenkinsConfig.getListener().getLogger().println(stderr);
 
         // Token check
-        if (stdout.toLowerCase().contains("token is required.") &&
-            (diggityConfig.getToken() == null || diggityConfig.getToken().isEmpty())) {
-            throw new IOException("Token cannot be null or empty");
+        if (stdout.toLowerCase().contains("token is required") &&
+            (diggityConfig.getToken() == null || diggityConfig.getToken().isEmpty()) || diggityConfig.getToken() == "") {
+                throw new AbortException("Diggity execution failed");
         }
 
         // Extract the line containing 'failed', 'error', '404', or 'status code'
