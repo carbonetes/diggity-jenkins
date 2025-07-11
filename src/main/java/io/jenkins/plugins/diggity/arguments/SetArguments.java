@@ -4,7 +4,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import hudson.AbortException;
-import io.jenkins.plugins.diggity.constants.Constants;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
 
@@ -16,6 +15,7 @@ public class SetArguments {
     private static final String INPUT = "--input";
     private static final String DIGGITY = "diggity";
     private static final String SCANTYPE = "--scan-type";
+    private static final String SKIPFAIL = "--skip-fail";
     // API
     private static final String TOKEN = "--token";
     private static final String PLUGIN = "--plugin-type";
@@ -32,10 +32,6 @@ public class SetArguments {
         String SCANTYPEVALUE = diggityConfig.getScanType() != null ? diggityConfig.getScanType() : "";
         String INPUTVALUE = diggityConfig.getScanName() != null ? diggityConfig.getScanName() : "";
         String TOKENINPUT = diggityConfig.getToken() != null ? diggityConfig.getToken() : "";
-
-        if (!diggityConfig.getSkipFail().booleanValue()) {
-            throw new AbortException(Constants.CI_FAILURE + " Skip Fail should be boolean value only.");
-        }
 
         // ANALYZER
         cmdArgs.add(CarbonetesCI);
@@ -57,6 +53,12 @@ public class SetArguments {
 
         cmdArgs.add(ENVIRONMENT);
         cmdArgs.add("test");
+
+        if (diggityConfig.getSkipFail()) {
+            cmdArgs.add(SKIPFAIL);
+        } else {
+            diggityConfig.setSkipFail(false);
+        }
 
         return cmdArgs.toArray(new String[0]);
     }

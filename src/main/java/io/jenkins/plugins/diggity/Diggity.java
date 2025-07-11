@@ -13,8 +13,8 @@ import hudson.tasks.Builder;
 import hudson.util.ListBoxModel;
 import hudson.util.ListBoxModel.Option;
 import io.jenkins.plugins.diggity.compile.Compile;
+import io.jenkins.plugins.diggity.install.CarbonetesCI;
 import io.jenkins.plugins.diggity.install.Exist;
-import io.jenkins.plugins.diggity.install.InstallBinary;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
 
@@ -90,7 +90,7 @@ public class Diggity extends Builder implements SimpleBuildStep {
         
         Exist diggityExist = new Exist();
         if (Boolean.FALSE.equals(diggityExist.checkIfExists(jenkinsConfig.getWorkspace()))) {
-            InstallBinary.installDiggity(jenkinsConfig, diggityConfig);
+            CarbonetesCI.install(jenkinsConfig, diggityConfig);
         } 
         Compile compileArgs = new Compile();
         compileArgs.compileArgs(jenkinsConfig, diggityConfig);
