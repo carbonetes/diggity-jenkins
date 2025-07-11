@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     diggity(
-                        scanType: 'image',           // Choose Scan Type: image, directory, tar, or sbom.
+                        scanType: 'image',           // Choose Scan Type: image, filesystem, tarball, or sbom.
                         scanName: 'ubuntu',          // Input: image:tag, filesystem dir path, or tarball file path.
                         skipFail: false,             // Default as false. Always Build Success [Not recommended to set true!]
                         token: ''                    // Personal access token
