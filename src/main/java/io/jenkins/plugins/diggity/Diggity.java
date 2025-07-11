@@ -13,10 +13,8 @@ import hudson.tasks.Builder;
 import hudson.util.ListBoxModel;
 import hudson.util.ListBoxModel.Option;
 import io.jenkins.plugins.diggity.compile.Compile;
-import io.jenkins.plugins.diggity.install.Clone;
-import io.jenkins.plugins.diggity.install.DiggityExist;
-import io.jenkins.plugins.diggity.install.Go;
-import io.jenkins.plugins.diggity.install.InstallBinary;
+import io.jenkins.plugins.diggity.install.CarbonetesCI;
+import io.jenkins.plugins.diggity.install.Exist;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
 
@@ -90,9 +88,9 @@ public class Diggity extends Builder implements SimpleBuildStep {
 
     public void clone(JenkinsConfig jenkinsConfig) throws IOException, InterruptedException {
         
-        DiggityExist diggityExist = new DiggityExist();
+        Exist diggityExist = new Exist();
         if (Boolean.FALSE.equals(diggityExist.checkIfExists(jenkinsConfig.getWorkspace()))) {
-            InstallBinary.installDiggity(jenkinsConfig, diggityConfig);
+            CarbonetesCI.install(jenkinsConfig, diggityConfig);
         } 
         Compile compileArgs = new Compile();
         compileArgs.compileArgs(jenkinsConfig, diggityConfig);
@@ -128,8 +126,8 @@ public class Diggity extends Builder implements SimpleBuildStep {
             return new ListBoxModel(
                 new Option("-- Select --", ""),
                 new Option("Image", "image"),
-                new Option("Directory", "directory"),
-                new Option("Tar File", "tar")
+                new Option("File System", "filesystem"),
+                new Option("Tar Ball", "tarball")
             );
         }
 
