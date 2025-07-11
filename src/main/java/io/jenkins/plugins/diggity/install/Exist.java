@@ -7,14 +7,14 @@ import java.nio.charset.StandardCharsets;
 
 import hudson.FilePath;
 
-public class DiggityExist {
+public class Exist {
 
     public Boolean checkIfExists(FilePath workspace) {
         CheckVersion checkVersion = new CheckVersion();
         String workspacePath = workspace.getRemote();
-        String version = checkVersion.getVersion();
-        String fileName = "diggity-" + version + "-Exist.txt";
-        String fileContent = "Diggity" + version + " installed on this workspace";
+        String version = checkVersion.getVersion(); 
+        String fileName = "carbonetes-ci" + version + "-exist.txt";
+        String fileContent = "carbonetes-ci" + version + " installed on this workspace";
 
         Boolean fileExists = checkFileExists(workspacePath, fileName);
         if (Boolean.FALSE.equals(fileExists)) {
@@ -36,4 +36,5 @@ public class DiggityExist {
         File file = new File(workspacePath, fileName);
         return file.exists() && !file.isDirectory();
     }
+     
 }

@@ -19,17 +19,17 @@ This Jenkins plugin scans a specified target and exposes its dependencies, licen
 <b>Description: </b>Specified the input on scan field based on the selected scan type.
 <br>
 <b>Option:</b>
-- `Image`: Provide the image to be scanned.
-- `Directory`: Provide the target directory path to be scanned.
-- `Tar File`: Provide the target tar file path to be scanned.
+- `Image`: Provide the image:tag.
+- `File System`: Provide the target filesystem directory path.
+- `Tarball`: Provide the target tarball file path.
 
 ## Scan
-<b>Input: </b> Image name, Directory path, tar file path, or sbom file path.
+<b>Input: </b> Image:tag, File System Directory Path, or Tar Ball File Path.
 
 ## Skip Build Fail
 Default value is `false / unchecked`.
 <br>
-<b>Warning:</b> If the value is checked, it will restrict the plugin from failing the build based on the assessment result.
+<b>Warning:</b> If the value is checked, it will restrict the plugin from failing the build based on the analysis result.
 
 # Output
 <img src="assets/sample_output.png">
@@ -43,10 +43,10 @@ pipeline {
             steps {
                 script {
                     diggity(
-                        token: '',                          // Personal access token: generated from Carbonetes Enterprise.
-                        scanType: 'image',                  // Choose Scan Type: image, directory, tar, or sbom.
-                        scanName: 'carbonetes/broker',      // Input: Image name, Directory path, tar file path, or sbom file path.
-                        skipFail: false,                    // Default: false.
+                        scanType: 'image',           // Choose Scan Type: image, directory, tar, or sbom.
+                        scanName: 'ubuntu',          // Input: image:tag, filesystem dir path, or tarball file path.
+                        skipFail: false,             // Default as false. Always Build Success [Not recommended to set true!]
+                        token: ''                    // Personal access token
                     )
                 }
             }

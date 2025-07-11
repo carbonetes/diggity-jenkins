@@ -5,13 +5,13 @@ import java.nio.charset.StandardCharsets;
 
 import hudson.AbortException;
 import io.jenkins.cli.shaded.org.apache.commons.io.output.ByteArrayOutputStream;
-import io.jenkins.plugins.diggity.model.ExecuteDiggity;
+import io.jenkins.plugins.diggity.model.BuildConfig;
 import io.jenkins.plugins.diggity.model.DiggityConfig;
 import io.jenkins.plugins.diggity.model.JenkinsConfig;
 
-public class ExecuteBinary {
+public class Execute {
 
-    public ExecuteDiggity executeDiggity(String[] cmd, JenkinsConfig jenkinsConfig, DiggityConfig diggityConfig) throws InterruptedException, IOException {
+    public BuildConfig binary(String[] cmd, JenkinsConfig jenkinsConfig, DiggityConfig diggityConfig) throws InterruptedException, IOException {
 
         String buildStatus = null;
         String assessmentSummary = null;
@@ -80,7 +80,7 @@ public class ExecuteBinary {
             buildStatus = "success";
         }
 
-        return new ExecuteDiggity(ret, buildStatus, assessmentSummary, diggityConfig.getSkipFail(), jenkinsConfig.getListener());
+        return new BuildConfig(ret, buildStatus, assessmentSummary, diggityConfig.getSkipFail(), jenkinsConfig.getListener());
     }
 
     private boolean containsNull(String[] array) {
