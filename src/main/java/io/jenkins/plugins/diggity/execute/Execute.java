@@ -11,7 +11,8 @@ import io.jenkins.plugins.diggity.model.JenkinsConfig;
 
 public class Execute {
 
-    public BuildConfig binary(String[] cmd, JenkinsConfig jenkinsConfig, DiggityConfig diggityConfig) throws InterruptedException, IOException {
+    public BuildConfig binary(String[] cmd, JenkinsConfig jenkinsConfig, DiggityConfig diggityConfig)
+            throws InterruptedException, IOException {
 
         String buildStatus = null;
         String assessmentSummary = null;
@@ -40,25 +41,26 @@ public class Execute {
 
         // Token check
         if (stdout.toLowerCase().contains("token is required") &&
-            (diggityConfig.getToken() == null || diggityConfig.getToken().isEmpty()) || diggityConfig.getToken() == "") {
-                throw new AbortException("Diggity execution failed");
+                (diggityConfig.getToken() == null || diggityConfig.getToken().isEmpty())
+                || diggityConfig.getToken() == "") {
+            throw new AbortException("Diggity execution failed");
         }
 
         // Extract the line containing 'failed', 'error', '404', or 'status code'
         if (ret != 0 || Boolean.FALSE.equals(diggityConfig.getSkipFail()) &&
-            (stdout.toLowerCase().contains("failed") || stderr.toLowerCase().contains("failed") ||
-            stdout.toLowerCase().contains("error") || stderr.toLowerCase().contains("error") ||
-            stdout.toLowerCase().contains("404")   || stderr.toLowerCase().contains("404")   ||
-            stdout.toLowerCase().contains("status code") || stderr.toLowerCase().contains("status code"))) {
+                (stdout.toLowerCase().contains("failed") || stderr.toLowerCase().contains("failed") ||
+                        stdout.toLowerCase().contains("error:") || stderr.toLowerCase().contains("error:") ||
+                        stdout.toLowerCase().contains("404") || stderr.toLowerCase().contains("404") ||
+                        stdout.toLowerCase().contains("status code") || stderr.toLowerCase().contains("status code"))) {
 
             buildStatus = "failed";
 
             String[] lines = stdout.split("\\r?\\n");
             for (String line : lines) {
                 if (line.toLowerCase().contains("failed") ||
-                    line.toLowerCase().contains("error") ||
-                    line.toLowerCase().contains("404") ||
-                    line.toLowerCase().contains("status code")) {
+                        line.toLowerCase().contains("error") ||
+                        line.toLowerCase().contains("404") ||
+                        line.toLowerCase().contains("status code")) {
                     assessmentSummary = line.trim();
                     break;
                 }
@@ -68,9 +70,9 @@ public class Execute {
                 lines = stderr.split("\\r?\\n");
                 for (String line : lines) {
                     if (line.toLowerCase().contains("failed") ||
-                        line.toLowerCase().contains("error") ||
-                        line.toLowerCase().contains("404") ||
-                        line.toLowerCase().contains("status code")) {
+                            line.toLowerCase().contains("error") ||
+                            line.toLowerCase().contains("404") ||
+                            line.toLowerCase().contains("status code")) {
                         assessmentSummary = line.trim();
                         break;
                     }
@@ -80,12 +82,14 @@ public class Execute {
             buildStatus = "success";
         }
 
-        return new BuildConfig(ret, buildStatus, assessmentSummary, diggityConfig.getSkipFail(), jenkinsConfig.getListener());
+        return new BuildConfig(ret, buildStatus, assessmentSummary, diggityConfig.getSkipFail(),
+                jenkinsConfig.getListener());
     }
 
     private boolean containsNull(String[] array) {
         for (String s : array) {
-            if (s == null) return true;
+            if (s == null)
+                return true;
         }
         return false;
     }
