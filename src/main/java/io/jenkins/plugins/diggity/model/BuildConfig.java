@@ -12,7 +12,8 @@ public class BuildConfig {
     private String buildStatus;
     private String assessmentSummary;
 
-    public BuildConfig(int ret, String buildStatus, String assessmentSummary, Boolean skipFail, TaskListener listener) throws AbortException {
+    public BuildConfig(int ret, String buildStatus, String assessmentSummary, Boolean skipFail, TaskListener listener)
+            throws AbortException {
         this.ret = ret;
         this.buildStatus = buildStatus;
         this.assessmentSummary = assessmentSummary;
